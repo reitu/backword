@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require("cors")
 const app = express();
+const game = require("./game")
 
 app.use(cors())
 app.options('*', cors())
@@ -18,21 +19,14 @@ app.use(function(req, res, next) {
     next()
 })
 
-
-const userRouter = require('./routes/users');
-const { checkGuess } = require('./game');
-
-
-app.get('/', (req, res) => {
-    res.send("testing reitu it works");
-  })
-
-app.use('/users',userRouter);
-
-app.post('/guess', (req,res) => {
-    res.send(checkGuess(req.body.guess));
-})
-
+app.get("/:guess", (req, res) => { //post usually requires a body and the info of where I'm posting to is usually in the body,easier this way. post can also user parameters, whatever is easier
+    //http:wordle/play/guess for example
+    const guess = req.params.guess
+    const result = game.checkGuess(guess)//returing user from db
+    res.end(JSON.stringify({ //this is what is returned to the frontt end and front end can read it
+        result //returned user is now part of response object to be sent to front end
+    }))  
+});
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => `Server running on port ${port} 🔥`);
