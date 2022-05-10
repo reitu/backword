@@ -162,6 +162,9 @@
     <script>
         const input = document.getElementById("input")
         const submit = document.getElementById("submit")
+        //const resultsBox = document.getElementsByClassName("results")
+
+        //resultsBox. 
 
         let results = []
 
@@ -196,21 +199,21 @@
 
         setup()
 
-        input.oninput = el => {
-            input.value = input.value.replace(/[^A-Za-z]/g, '').toUpperCase().substring(0, 5)
-            submit.disabled = input.value.length != 5
+        input.oninput = el => { //immediately when you input do this
+            input.value = input.value.replace(/[^A-Za-z]/g, '').toUpperCase().substring(0, 5) //make the value UC immed
+            submit.disabled = input.value.length != 5 //must disable button if length>5?
         }
 
-        submit.onclick = async () => {
-            var result = await guess(input.value)
+        submit.onclick = async () => { //when you click on the submit, the following must happen
+            var result = await guess(input.value) //must send the input value to test if good
             
-            results.push(result.result)
-            renderResults()
-            input.value = ""
+            results.push(result.result) //add your new guess to arrressults
+            renderResults() //show the new word
+            input.value = "" //make input value empty again
         }
 
         function guess(input) {
-            return fetch('http://192.168.88.164:5000/' + input, {
+            return fetch('https://us-central1-reituwordle.cloudfunctions.net/app/' + input, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json, text/plain, */*',

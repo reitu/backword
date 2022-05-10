@@ -1,7 +1,8 @@
+const functions = require("firebase-functions");
 const express = require('express');
 const cors = require("cors")
 const app = express();
-const game = require("./functions/game")
+const game = require("./game")
 
 app.use(cors())
 app.options('*', cors())
@@ -28,5 +29,4 @@ app.get("/:guess", (req, res) => { //post usually requires a body and the info o
     }))  
 });
 
-const port = process.env.PORT || 5000;
-app.listen(port, () => `Server running on port ${port} 🔥`);
+exports.app = functions.https.onRequest(app); //firebase function
